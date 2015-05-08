@@ -1,0 +1,25 @@
+{
+  "name": "hubot-karma-simple",
+  "version": "0.1.0",
+  "description": "A hubot script for adding or removing karma",
+  "main": "index.coffee",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hiroyukim/hubot-karma-simple.git"
+  },
+  "keywords": [
+    "hubot",
+    "points",
+    "plus",
+    "simple",
+    "karma"
+  ],
+  "author": "hiroyukim <https://github.com/hiroyukim>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiroyukim/hubot-karma-simple/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6"
+  },
+}
