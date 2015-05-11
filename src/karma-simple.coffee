@@ -41,7 +41,6 @@ class KarmaSimple
         @cache = @robot.brain.data.karma_simple
 
     unless @cache['increment_message_list'].length
-        console.log 'aaaa'
         @cache['increment_message_list'].push 'level up!'
 
     unless @cache['decrement_message_list'].length
