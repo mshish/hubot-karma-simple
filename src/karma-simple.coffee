@@ -171,7 +171,7 @@ module.exports = (robot) ->
         if karma.has_black_list(thing)
             continue
 
-        if karma.thing_black_list_regexp && thing_black_list_regexp.test(thing)
+        if thing_black_list_regexp && thing_black_list_regexp.test(thing)
             continue
 
         msg_thing   = thing
