@@ -160,7 +160,7 @@ module.exports = (robot) ->
 
   robot.hear message_regexp, (msg) ->
 
-    if message_black_list_regexp && message_black_list_regexp.exec(msg.envelope.message.toString())
+    if message_black_list_regexp && message_black_list_regexp.test(msg.envelope.message.toString())
         return
     
     for row in msg.match
@@ -171,7 +171,7 @@ module.exports = (robot) ->
         if karma.has_black_list(thing)
             continue
 
-        if karma.thing_black_list_regexp && thing_black_list_regexp.exec(thing)
+        if karma.thing_black_list_regexp && thing_black_list_regexp.test(thing)
             continue
 
         msg_thing   = thing
@@ -228,7 +228,7 @@ module.exports = (robot) ->
     
     increment_message = msg.match[1]
     
-    if message_regexp_row.exec(increment_message)
+    if message_regexp_row.test(increment_message)
         msg.send "unable to register"
         return
 
@@ -247,7 +247,7 @@ module.exports = (robot) ->
 
     decrement_message = msg.match[1]
 
-    if message_regexp_row.exec(decrement_message)
+    if message_regexp_row.test(decrement_message)
         msg.send "unable to register"
         return
 
