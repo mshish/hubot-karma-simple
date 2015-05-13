@@ -26,7 +26,15 @@
 class KarmaSimple
 
   constructor: (@robot) ->
-    @cache = {data: {},alias: {}, black_list: {}, increment_message_list: [], decrement_message_list: []}
+    cacheLoaded = =>
+      @cache = @robot.brain.data.karma_simple ||= {
+        data: {}
+        alias: {}
+        black_list: {}
+        increment_message_list: []
+        decrement_message_list: []
+      }
+
     @message_regexp_string = "([^\\s]+)(\\+\\+|--)"
 
     @use_command_increment_message    = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_INCREMENT_MESSAGE
@@ -36,9 +44,8 @@ class KarmaSimple
     @thing_black_list_regexp_string   = process.env.HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
     @message_black_list_regexp_string = process.env.HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING
 
-    @robot.brain.on 'loaded', =>
-      if @robot.brain.data.karma_simple
-        @cache = @robot.brain.data.karma_simple
+    @robot.brain.on "loaded", cacheLoaded
+    cacheLoaded()
 
     unless @cache['increment_message_list'].length
         @cache['increment_message_list'].push 'level up!'
