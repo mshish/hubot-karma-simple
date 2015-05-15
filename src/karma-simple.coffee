@@ -166,7 +166,7 @@ module.exports = (robot) ->
 
   robot.hear message_regexp, (msg) ->
 
-    if message_black_list_regexp && message_black_list_regexp.test(msg.envelope.message.toString())
+    if message_black_list_regexp && message_black_list_regexp.test(msg.message.toString())
         return
     
     for row in msg.match
