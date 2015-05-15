@@ -11,6 +11,7 @@
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
 #   HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
 #   HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING
+#   HUBOT_KARUMA_SIMPLE_ROOM_BLACK_LIST_REGEXP_STRING
 #
 # Commands:
 #   <thing>++ - give thing some karma
@@ -43,6 +44,7 @@ class KarmaSimple
     @use_command_alias                = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
     @thing_black_list_regexp_string   = process.env.HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
     @message_black_list_regexp_string = process.env.HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING
+    @room_black_list_regexp_string    = process.env.HUBOT_KARUMA_SIMPLE_ROOM_BLACK_LIST_REGEXP_STRING
 
     @robot.brain.on "loaded", cacheLoaded
     cacheLoaded()
@@ -163,8 +165,12 @@ module.exports = (robot) ->
   message_regexp_row        = new RegExp(karma.message_regexp_string)
   thing_black_list_regexp   = if karma.thing_black_list_regexp_string   then new RegExp(karma.thing_black_list_regexp_string) else null
   message_black_list_regexp = if karma.message_black_list_regexp_string then new RegExp(karma.message_black_list_regexp_string) else null
+  room_black_list_regexp    = if karma.room_black_list_regexp_string    then new RegExp(karma.room_black_list_regexp_string) else null
 
   robot.hear message_regexp, (msg) ->
+
+    if room_black_list_regexp && room_black_list_regexp.test(msg.message.room)
+        return
 
     if message_black_list_regexp && message_black_list_regexp.test(msg.message.toString())
         return
