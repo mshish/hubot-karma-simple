@@ -1,6 +1,6 @@
 {
   "name": "hubot-karma-simple",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A hubot script for adding or removing karma",
   "main": "index.coffee",
   "repository": {
