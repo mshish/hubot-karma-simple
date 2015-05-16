@@ -36,15 +36,21 @@ class KarmaSimple
         decrement_message_list: []
       }
 
-    @message_regexp_string = "([^\\s]+)(\\+\\+|--)"
+    message_regexp_string = "([^\\s]+)(\\+\\+|--)"
 
     @use_command_increment_message    = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_INCREMENT_MESSAGE
     @use_command_decrement_message    = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_DECREMENT_MESSAGE
     @use_command_black_list           = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_BLACK_LIST
     @use_command_alias                = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
-    @thing_black_list_regexp_string   = process.env.HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
-    @message_black_list_regexp_string = process.env.HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING
-    @room_black_list_regexp_string    = process.env.HUBOT_KARUMA_SIMPLE_ROOM_BLACK_LIST_REGEXP_STRING
+
+    @message_regexp     = new RegExp(message_regexp_string,"g","m")
+    @message_regexp_row = new RegExp(message_regexp_string)
+    @thing_black_list_regexp =
+        if process.env.HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING then new RegExp(process.env.HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING) else null
+    @message_black_list_regexp =
+        if process.env.HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING then new RegExp(process.env.HUBOT_KARUMA_SIMPLE_MESSAGE_BLACK_LIST_REGEXP_STRING) else null
+    @room_black_list_regexp =
+        if process.env.HUBOT_KARUMA_SIMPLE_ROOM_BLACK_LIST_REGEXP_STRING then new RegExp(process.env.HUBOT_KARUMA_SIMPLE_ROOM_BLACK_LIST_REGEXP_STRING) else null
 
     @robot.brain.on "loaded", cacheLoaded
     cacheLoaded()
@@ -161,29 +167,23 @@ module.exports = (robot) ->
 
   karma = new KarmaSimple robot
 
-  message_regexp            = new RegExp(karma.message_regexp_string,"g","m")
-  message_regexp_row        = new RegExp(karma.message_regexp_string)
-  thing_black_list_regexp   = if karma.thing_black_list_regexp_string   then new RegExp(karma.thing_black_list_regexp_string) else null
-  message_black_list_regexp = if karma.message_black_list_regexp_string then new RegExp(karma.message_black_list_regexp_string) else null
-  room_black_list_regexp    = if karma.room_black_list_regexp_string    then new RegExp(karma.room_black_list_regexp_string) else null
+  robot.hear karma.message_regexp, (msg) ->
 
-  robot.hear message_regexp, (msg) ->
-
-    if room_black_list_regexp && room_black_list_regexp.test(msg.message.room)
+    if karma.room_black_list_regexp && karma.room_black_list_regexp.test(msg.message.room)
         return
 
-    if message_black_list_regexp && message_black_list_regexp.test(msg.message.toString())
+    if karma.message_black_list_regexp && karma.message_black_list_regexp.test(msg.message.toString())
         return
 
     for row in msg.match
-        match_row = row.match(message_regexp_row)
+        match_row = row.match(karma.message_regexp_row)
         thing = match_row[1]
         op    = match_row[2]
 
         if karma.has_black_list(thing)
             continue
 
-        if thing_black_list_regexp && thing_black_list_regexp.test(thing)
+        if karma.thing_black_list_regexp && karma.thing_black_list_regexp.test(thing)
             continue
 
         msg_thing   = thing
