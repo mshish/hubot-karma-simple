@@ -27,7 +27,7 @@
     "chai": "*",
     "sinon-chai": "*",
     "sinon": "*"
-  }
+  },
   "dependencies": {
     "coffee-script": "~1.6"
   }
