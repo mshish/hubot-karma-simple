@@ -27,3 +27,8 @@ describe 'KarmaSimpleStorage', ->
       s.increment('thing')
       expect(s.get_with_alias('thing')).to.equal(1)
 
+  describe 'decrement', ->
+    it 'decrement karma to a user', ->
+      s.decrement('thing')
+      expect(s.get_with_alias('thing')).to.equal(-1)
+
