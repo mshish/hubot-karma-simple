@@ -19,6 +19,12 @@
   "bugs": {
     "url": "https://github.com/hiroyukim/hubot-karma-simple/issues"
   },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "sinon-chai": "*",
+    "sinon": "*"
+  }
   "dependencies": {
     "coffee-script": "~1.6"
   }
