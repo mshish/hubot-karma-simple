@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git://github.com/hiroyukim/hubot-karma-simple.git"
   },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --recursive ./test"
+  },
   "keywords": [
     "hubot",
     "points",
