@@ -23,7 +23,7 @@ describe 'KarmaSimpleStorage', ->
     s = new KarmaSimpleStorage (robotStub)
 
   describe 'increment', ->
-    it 'adds points to a user', ->
+    it 'increment karma to a user', ->
       s.increment('thing')
       expect(s.get_with_alias('thing')).to.equal(1)
 
