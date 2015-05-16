@@ -51,3 +51,8 @@ describe 'KarmaSimpleStorage', ->
     it 'delete_decrement_message_list to decrement_message_list', ->
       s.delete_decrement_message_list('thing')
       expect(s.cache.decrement_message_list).to.not.include('thing')
+
+  describe 'alias', ->
+    it 'set|get alias', ->
+      s.set_alias('thing','alias_name')
+      expect(s.get_alias('alias_name')).to.equal('thing')
