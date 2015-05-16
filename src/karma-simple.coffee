@@ -174,7 +174,7 @@ module.exports = (robot) ->
 
     if message_black_list_regexp && message_black_list_regexp.test(msg.message.toString())
         return
-    
+
     for row in msg.match
         match_row = row.match(message_regexp_row)
         thing = match_row[1]
@@ -233,13 +233,13 @@ module.exports = (robot) ->
         msg.send "add black list #{black}"
 
   robot.respond /karma-simple increment_message (.+)?/, (msg) ->
-    
+
     unless karma.use_command_increment_message
         msg.send "cannot use this command now. (see Configuration:"
         return
-    
+
     increment_message = msg.match[1]
-    
+
     if message_regexp_row.test(increment_message)
         msg.send "unable to register"
         return
@@ -252,7 +252,7 @@ module.exports = (robot) ->
         msg.send "add increment_message #{increment_message}"
 
   robot.respond /karma-simple decrement_message (.+)?/, (msg) ->
-    
+
     unless karma.use_command_decrement_message
         msg.send "cannot use this command now. (see Configuration:"
         return
