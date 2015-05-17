@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git://github.com/hiroyukim/hubot-karma-simple.git"
   },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --recursive ./test"
+  },
   "keywords": [
     "hubot",
     "points",
@@ -18,6 +21,12 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hiroyukim/hubot-karma-simple/issues"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "sinon-chai": "*",
+    "sinon": "*"
   },
   "dependencies": {
     "coffee-script": "~1.6"

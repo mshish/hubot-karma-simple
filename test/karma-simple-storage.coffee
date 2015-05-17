@@ -1,0 +1,72 @@
+chai = require 'chai'
+sinon = require 'sinon'
+chai.use require 'sinon-chai'
+
+expect = chai.expect
+
+KarmaSimpleStorage = require '../src/karma-simple-storage.coffee'
+
+robotStub = {}
+
+describe 'KarmaSimpleStorage', ->
+  s = {}
+
+  beforeEach ->
+    robotStub =
+      brain:
+        data: { }
+        on: ->
+        emit: ->
+        save: ->
+      logger:
+        debug: ->
+    s = new KarmaSimpleStorage (robotStub)
+
+  describe 'increment', ->
+    it 'increment karma to a user', ->
+      s.increment('thing')
+      expect(s.get_with_alias('thing')).to.equal(1)
+
+  describe 'decrement', ->
+    it 'decrement karma to a user', ->
+      s.decrement('thing')
+      expect(s.get_with_alias('thing')).to.equal(-1)
+
+  describe 'increment_message_list', ->
+
+    it 'add_increment_message_list to increment_message_list', ->
+      s.add_increment_message_list('thing')
+      expect(s.cache.increment_message_list).to.include('thing')
+
+    it 'delete_increment_message_list to increment_message_list', ->
+      s.delete_increment_message_list('thing')
+      expect(s.cache.increment_message_list).to.not.include('thing')
+
+  describe 'decrement_message_list', ->
+
+    it 'add_decrement_message_list to decrement_message_list', ->
+      s.add_decrement_message_list('thing')
+      expect(s.cache.decrement_message_list).to.include('thing')
+
+    it 'delete_decrement_message_list to decrement_message_list', ->
+      s.delete_decrement_message_list('thing')
+      expect(s.cache.decrement_message_list).to.not.include('thing')
+
+  describe 'alias', ->
+    it 'set|get alias', ->
+      s.set_alias('thing','alias_name')
+      expect(s.get_alias('alias_name')).to.equal('thing')
+
+    it 'delete alias', ->
+      s.delete_alias('alias_name')
+      expect(s.get_alias('alias_name')).to.undefined
+
+  describe 'black_list', ->
+    it 'set black_list', ->
+      s.set_black_list('thing')
+      expect(s.has_black_list('thing')).is.true
+
+    it 'delete black_list', ->
+      s.set_black_list('thing')
+      s.delete_black_list('thing')
+      expect(s.has_black_list('thing')).is.undefined
