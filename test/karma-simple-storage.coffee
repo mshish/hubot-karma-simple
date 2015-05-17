@@ -56,3 +56,7 @@ describe 'KarmaSimpleStorage', ->
     it 'set|get alias', ->
       s.set_alias('thing','alias_name')
       expect(s.get_alias('alias_name')).to.equal('thing')
+
+    it 'delete alias', ->
+      s.delete_alias('alias_name')
+      expect(s.get_alias('alias_name')).to.undefined
