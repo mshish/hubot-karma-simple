@@ -60,3 +60,13 @@ describe 'KarmaSimpleStorage', ->
     it 'delete alias', ->
       s.delete_alias('alias_name')
       expect(s.get_alias('alias_name')).to.undefined
+
+  describe 'black_list', ->
+    it 'set black_list', ->
+      s.set_black_list('thing')
+      expect(s.has_black_list('thing')).is.true
+
+    it 'delete black_list', ->
+      s.set_black_list('thing')
+      s.delete_black_list('thing')
+      expect(s.has_black_list('thing')).is.undefined
