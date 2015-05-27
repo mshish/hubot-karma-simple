@@ -69,8 +69,8 @@ module.exports = (robot) ->
         msg.send "cannot use this command now. (see Configuration:"
         return
 
-    if karma.get_alias thing
-        karma.delete_alias thing
+    if karma.get_alias alias_name
+        karma.delete_alias alias_name
         msg.send "delete #{thing} alias #{alias_name}"
     else
         karma.set_alias thing, alias_name
