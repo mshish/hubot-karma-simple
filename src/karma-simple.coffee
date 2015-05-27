@@ -103,7 +103,7 @@ module.exports = (robot) ->
 
     increment_message = msg.match[1]
 
-    if message_regexp_row.test(increment_message)
+    if karma.message_regexp_row.test(increment_message)
         msg.send "unable to register"
         return
 
@@ -122,7 +122,7 @@ module.exports = (robot) ->
 
     decrement_message = msg.match[1]
 
-    if message_regexp_row.test(decrement_message)
+    if karma.message_regexp_row.test(decrement_message)
         msg.send "unable to register"
         return
 
