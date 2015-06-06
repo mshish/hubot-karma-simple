@@ -35,21 +35,21 @@ describe 'KarmaSimpleStorage', ->
   describe 'increment_message_list', ->
 
     it 'add_increment_message_list to increment_message_list', ->
-      s.add_increment_message_list('thing')
+      s.add_message_list('increment_message_list','thing')
       expect(s.cache.increment_message_list).to.include('thing')
 
     it 'delete_increment_message_list to increment_message_list', ->
-      s.delete_increment_message_list('thing')
+      s.delete_message_list('increment_message_list','thing')
       expect(s.cache.increment_message_list).to.not.include('thing')
 
   describe 'decrement_message_list', ->
 
     it 'add_decrement_message_list to decrement_message_list', ->
-      s.add_decrement_message_list('thing')
+      s.add_message_list('decrement_message_list','thing')
       expect(s.cache.decrement_message_list).to.include('thing')
 
     it 'delete_decrement_message_list to decrement_message_list', ->
-      s.delete_decrement_message_list('thing')
+      s.delete_message_list('decrement_message_list','thing')
       expect(s.cache.decrement_message_list).to.not.include('thing')
 
   describe 'alias', ->

@@ -47,51 +47,28 @@ class KarmaSimpleStorage
     unless @cache['decrement_message_list'].length
         @cache['decrement_message_list'].push 'lost a level.'
 
-  add_increment_message_list: (message) ->
-    @cache['increment_message_list'].push message
+  add_message_list: (type,message) ->
+    @cache[type].push message
     @robot.brain.data.karma_simple = @cache
 
-  delete_increment_message_list: (message) ->
-    for value,index in @cache['increment_message_list']
+  delete_message_list: (type,message) ->
+    for value,index in @cache[type]
         if value == message
-            @cache['increment_message_list'].splice(index,1)
+            @cache[type].splice(index,1)
             @robot.brain.data.karma_simple = @cache
             break
 
-  delete_decrement_message_list: (message) ->
-    for value,index in @cache['decrement_message_list']
-        if value == message
-            @cache['decrement_message_list'].splice(index,1)
-            @robot.brain.data.karma_simple = @cache
-            break
+  get_message: (type,message) ->
+    @cache[type][Math.floor(Math.random() * @cache[type].length)]
 
-  get_increment_message: (message) ->
-    @cache['increment_message_list'][Math.floor(Math.random() * @cache['increment_message_list'].length)]
+  get_message_list: (type) ->
+    @cache[type]
 
-  get_increment_message_list: ->
-    @cache['increment_message_list']
-
-  has_increment_message_list: (message) ->
-    for increment_message in @cache['increment_message_list']
+  has_message_list: (type,message) ->
+    for increment_message in @cache[type]
         if increment_message == message
             return true
     return
-
-  has_decrement_message_list: (message) ->
-    for decrement_message in @cache['decrement_message_list']
-        if decrement_message == message
-            return true
-    return
-
-  add_decrement_message_list: (message) ->
-    @cache['decrement_message_list'].push message
-    @robot.brain.data.karma_simple = @cache
-
-  get_decrement_message: (message) ->
-    @cache['decrement_message_list'][Math.floor(Math.random() * @cache['decrement_message_list'].length)]
-
-  get_decrement_message_list: ->
-    @cache['decrement_message_list']
 
   set_alias: (thing,alias_name) ->
     @cache['alias'][alias_name] = thing
