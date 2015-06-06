@@ -176,31 +176,31 @@ describe 'KarmaSimple(increment_message)', ->
 
   it 'add increment_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add increment_message Happy/
+      expect(strings[0]).match /add increment_message_list Happy/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
     return
   it 'delete increment_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add increment_message Happy/
+      expect(strings[0]).match /add increment_message_list Happy/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete increment_message Happy/
+      expect(strings[0]).match /delete increment_message_list Happy/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
     return
   it 'new increment_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add increment_message Happy/
+      expect(strings[0]).match /add increment_message_list Happy/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete increment_message lost a level\./
+      expect(strings[0]).match /delete increment_message_list lost a level\./
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message lost a level.")
@@ -234,31 +234,31 @@ describe 'KarmaSimple(decrement_message)', ->
 
   it 'add decrement_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add decrement_message Sorry/
+      expect(strings[0]).match /add decrement_message_list Sorry/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
     return
   it 'delete decrement_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add decrement_message Sorry/
+      expect(strings[0]).match /add decrement_message_list Sorry/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete decrement_message Sorry/
+      expect(strings[0]).match /delete decrement_message_list Sorry/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
     return
   it 'new decrement_message', (done) ->
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add decrement_message Sorry/
+      expect(strings[0]).match /add decrement_message_list Sorry/
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete decrement_message lost a level\./
+      expect(strings[0]).match /delete decrement_message_list lost a level\./
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message lost a level.")

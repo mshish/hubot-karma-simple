@@ -56,10 +56,10 @@ module.exports = (robot) ->
 
         if op == '++'
             karma.increment thing
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_increment_message()}"
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_message('increment_message_list')}"
         else
             karma.decrement thing
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_decrement_message()}"
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_message('decrement_message_list')}"
 
   robot.respond /karma-simple alias ([^\s]+) ([^\s]+)/, (msg) ->
     thing      = msg.match[1]
@@ -95,41 +95,26 @@ module.exports = (robot) ->
         karma.set_black_list black
         msg.send "add black list #{black}"
 
-  robot.respond /karma-simple increment_message (.+)?/, (msg) ->
+  robot.respond /karma-simple (increment_message|decrement_message) (.+)?/, (msg) ->
 
-    unless karma.use_command_increment_message
+    type    = msg.match[1]
+    message = msg.match[2]
+
+    use_command_type = "use_command_#{type}"
+    message_type     = "#{type}_list"
+
+    unless karma[use_command_type]
         msg.send "cannot use this command now. (see Configuration:"
         return
 
-    increment_message = msg.match[1]
-
-    if karma.message_regexp_row.test(increment_message)
+    if karma.message_regexp_row.test(message)
         msg.send "unable to register"
         return
 
-    if karma.has_increment_message_list increment_message
-        karma.delete_increment_message_list increment_message
-        msg.send "delete increment_message #{increment_message}"
+    if karma.has_message_list message_type,message
+        karma.delete_message_list message_type,message
+        msg.send "delete #{message_type} #{message}"
     else
-        karma.add_increment_message_list increment_message
-        msg.send "add increment_message #{increment_message}"
-
-  robot.respond /karma-simple decrement_message (.+)?/, (msg) ->
-
-    unless karma.use_command_decrement_message
-        msg.send "cannot use this command now. (see Configuration:"
-        return
-
-    decrement_message = msg.match[1]
-
-    if karma.message_regexp_row.test(decrement_message)
-        msg.send "unable to register"
-        return
-
-    if karma.has_decrement_message_list decrement_message
-        karma.delete_decrement_message_list decrement_message
-        msg.send "delete decrement_message #{decrement_message}"
-    else
-        karma.add_decrement_message_list decrement_message
-        msg.send "add decrement_message #{decrement_message}"
+        karma.add_message_list message_type,message
+        msg.send "add #{message_type} #{message}"
 
