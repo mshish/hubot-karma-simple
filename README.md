@@ -12,6 +12,8 @@ API
 * `hubot karma-simple black_list <thing>` set|delete black_list 
 * `hubot karma-simple increment_message <message>` set|delete increment_message 
 * `hubot karma-simple decrement_message <message>` set|delete decrement_message 
+* `hubot karma-simple personal increment_message <message>` set|delete increment_message
+* `hubot karma-simple personal decrement_message <message>` set|delete decrement_message
 
 ## Installation
 
