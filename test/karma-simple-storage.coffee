@@ -70,3 +70,12 @@ describe 'KarmaSimpleStorage', ->
       s.set_black_list('thing')
       s.delete_black_list('thing')
       expect(s.has_black_list('thing')).is.undefined
+
+  describe 'personal increment_message_list', ->
+
+    it 'add|delete_personal_increment_message_list to personal.user_name.increment_message_list', ->
+      s.add_personal_message_list('hoge','increment_message_list','thing')
+      expect(s.cache['personal']['hoge']['increment_message_list']).to.include('thing')
+
+      s.delete_personal_message_list('hoge','increment_message_list','thing')
+      expect(s.cache['personal']['hoge']['increment_message_list']).to.not.include('thing')

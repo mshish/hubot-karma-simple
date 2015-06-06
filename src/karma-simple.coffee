@@ -7,6 +7,8 @@
 # Configuration:
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_INCREMENT_MESSAGE
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_DECREMENT_MESSAGE
+#   HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_INCREMENT_MESSAGE
+#   HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_DECREMENT_MESSAGE
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_BLACK_LIST
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
 #   HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
@@ -20,6 +22,8 @@
 #   hubot karma-simple black_list <thing>
 #   hubot karma-simple increment_message <message>
 #   hubot karma-simple decrement_message <message>
+#   hubot karma-simple personal increment_message <message>
+#   hubot karma-simple personal decrement_message <message>
 #
 # Author:
 #   hiroyukim
@@ -117,4 +121,28 @@ module.exports = (robot) ->
     else
         karma.add_message_list message_type,message
         msg.send "add #{message_type} #{message}"
+
+  robot.respond /karma-simple personal (increment_message|decrement_message) (.+)/, (msg) ->
+
+    type      = msg.match[1]
+    message   = msg.match[2]
+    user_name = msg.message.user.name
+
+    use_command_type = "use_command_personal_#{type}"
+    message_type     = "#{type}_list"
+
+    unless karma[use_command_type]
+        msg.send "cannot use this command now. (see Configuration:"
+        return
+
+    if karma.message_regexp_row.test(message)
+        msg.send "unable to register"
+        return
+
+    if karma.has_personal_message_list user_name,message_type,message
+        karma.delete_personal_message_list user_name,message_type,message
+        msg.send "delete personal #{message_type} #{message}"
+    else
+        karma.add_personal_message_list user_name,message_type,message
+        msg.send "add personal #{message_type} #{message}"
 

@@ -98,6 +98,22 @@ describe 'KarmaSimple(default)', ->
     adapter.receive new TextMessage(user, "hubot karma-simple black_list hoge")
     return
 
+  it 'add personal_increment_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /cannot use this command now\. \(see Configuration:/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message hoge")
+    return
+
+  it 'add personal_decrement_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /cannot use this command now\. \(see Configuration:/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message hoge")
+    return
+
   return
 
 describe 'KarmaSimple(alias)', ->
@@ -389,3 +405,119 @@ describe 'KarmaSimple(message black list regexp string)', ->
     return
 
   return
+
+describe 'KarmaSimple(personal_increment_message)', ->
+  robot = undefined
+  user = undefined
+  adapter = undefined
+  beforeEach (done) ->
+    robot = new Robot(null, 'mock-adapter', false, 'hubot')
+    robot.adapter.on 'connected', ->
+      process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_INCREMENT_MESSAGE = "1"
+      require('../src/karma-simple') robot
+      user = robot.brain.userForId('1',
+        name: 'mocha'
+        room: '#mocha')
+      adapter = robot.adapter
+      done()
+      return
+    robot.run()
+    return
+  afterEach ->
+    robot.shutdown()
+    return
+
+  it 'add personal_increment_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal increment_message_list Happy/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
+    return
+  it 'delete personal increment_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal increment_message_list Happy/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /delete personal increment_message_list Happy/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
+    return
+  it 'new personal increment_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal increment_message_list Happy/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /delete personal increment_message_list lost a level\./
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message lost a level.")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /hoge: 1 Happy/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hoge++")
+    return
+
+describe 'KarmaSimple(personal_decrement_message)', ->
+  robot = undefined
+  user = undefined
+  adapter = undefined
+  beforeEach (done) ->
+    robot = new Robot(null, 'mock-adapter', false, 'hubot')
+    robot.adapter.on 'connected', ->
+      process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_DECREMENT_MESSAGE = "1"
+      require('../src/karma-simple') robot
+      user = robot.brain.userForId('1',
+        name: 'mocha'
+        room: '#mocha')
+      adapter = robot.adapter
+      done()
+      return
+    robot.run()
+    return
+  afterEach ->
+    robot.shutdown()
+    return
+
+  it 'add personal_decrement_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal decrement_message_list Sorry/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
+    return
+  it 'delete personal decrement_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal decrement_message_list Sorry/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /delete personal decrement_message_list Sorry/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
+    return
+  it 'new personal decrement_message', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /add personal decrement_message_list Sorry/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /delete personal decrement_message_list lost a level\./
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message lost a level.")
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /hoge: 1 Sorry/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hoge--")
+    return
