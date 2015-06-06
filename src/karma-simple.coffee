@@ -60,10 +60,12 @@ module.exports = (robot) ->
 
         if op == '++'
             karma.increment thing
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_message('increment_message_list')}"
+            increment_message = karma.get_personal_message(msg.message.user.name,'increment_message_list') || karma.get_message('increment_message_list')
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{increment_message}"
         else
             karma.decrement thing
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{karma.get_message('decrement_message_list')}"
+            decrement_message = karma.get_personal_message(msg.message.user.name,'decrement_message_list') || karma.get_message('decrement_message_list')
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{decrement_message}"
 
   robot.respond /karma-simple alias ([^\s]+) ([^\s]+)/, (msg) ->
     thing      = msg.match[1]

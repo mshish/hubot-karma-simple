@@ -453,11 +453,6 @@ describe 'KarmaSimple(personal_increment_message)', ->
       return
     adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
     adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete personal increment_message_list lost a level\./
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message lost a level.")
-    adapter.on 'send', (envelope, strings) ->
       expect(strings[0]).match /hoge: 1 Happy/
       done()
       return
@@ -510,11 +505,6 @@ describe 'KarmaSimple(personal_decrement_message)', ->
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete personal decrement_message_list lost a level\./
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message lost a level.")
     adapter.on 'send', (envelope, strings) ->
       expect(strings[0]).match /hoge: 1 Sorry/
       done()
