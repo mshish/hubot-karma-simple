@@ -45,8 +45,6 @@ class KarmaSimpleStorage
     @robot.brain.on "loaded", cacheLoaded
     cacheLoaded()
 
-    @cache['personal'] ?= {}
-
     unless @cache['increment_message_list'].length
         @cache['increment_message_list'].push 'level up!'
 
@@ -54,11 +52,14 @@ class KarmaSimpleStorage
         @cache['decrement_message_list'].push 'lost a level.'
 
   add_personal_message_list: (user_name,type,message) ->
+    @cache['personal'] ?= {}
     @cache['personal'][user_name] ?= {}
     @cache['personal'][user_name][type] ?= []
     @cache['personal'][user_name][type].push message
 
   delete_personal_message_list: (user_name,type,message) ->
+    unless @cache['personal']
+        return
     unless @cache['personal'][user_name]
         return
     unless @cache['personal'][user_name][type]
@@ -70,6 +71,8 @@ class KarmaSimpleStorage
             break
 
   get_personal_message: (user_name,type,message) ->
+    unless @cache['personal']
+        return
     unless @cache['personal'][user_name]
         return
     unless @cache['personal'][user_name][type]
@@ -78,6 +81,8 @@ class KarmaSimpleStorage
     @cache['personal'][user_name][type][Math.floor(Math.random() * @cache['personal'][user_name][type].length)]
 
   get_personal_message_list: (user_name,type) ->
+    unless @cache['personal']
+        return
     unless @cache['personal'][user_name]
         return
     unless @cache['personal'][user_name][type]
@@ -86,6 +91,8 @@ class KarmaSimpleStorage
     @cache['personal'][user_name][type]
 
   has_personal_message_list: (user_name,type,message) ->
+    unless @cache['personal']
+        return
     unless @cache['personal'][user_name]
         return
     unless @cache['personal'][user_name][type]
