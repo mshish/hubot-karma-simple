@@ -47,14 +47,6 @@ describe 'KarmaSimple(default)', ->
       expect(strings[0]).match /hoge: 1 level up!/
       done()
       return
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 2 level up!/
-      done()
-      return
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 3 level up!/
-      done()
-      return
     adapter.receive new TextMessage(user, "hoge++ hoge++ hoge++")
     return
 
@@ -144,30 +136,6 @@ describe 'KarmaSimple(alias)', ->
       return
     adapter.receive new TextMessage(user, "hubot karma-simple alias hoge page")
     return
-  it 'delete alias', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add hoge alias page/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple alias hoge page")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete hoge alias page/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple alias hoge page")
-    return
-  it 'alias++', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add hoge alias page/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple alias hoge page")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 level up!/
-      done()
-      return
-    adapter.receive new TextMessage(user, "page++")
-    return
 
 describe 'KarmaSimple(increment_message)', ->
   robot = undefined
@@ -196,35 +164,6 @@ describe 'KarmaSimple(increment_message)', ->
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
-    return
-  it 'delete increment_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
-    return
-  it 'new increment_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple increment_message Happy")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete increment_message_list lost a level\./
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple increment_message lost a level.")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hoge++")
     return
 
 describe 'KarmaSimple(decrement_message)', ->
@@ -255,35 +194,6 @@ describe 'KarmaSimple(decrement_message)', ->
       return
     adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
     return
-  it 'delete decrement_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
-    return
-  it 'new decrement_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple decrement_message Sorry")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete decrement_message_list lost a level\./
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple decrement_message lost a level.")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hoge--")
-    return
 
 describe 'KarmaSimple(black_list)', ->
   robot = undefined
@@ -312,30 +222,6 @@ describe 'KarmaSimple(black_list)', ->
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple black_list Hoge")
-    return
-  it 'delete black_list', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add black list Hoge/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple black_list Hoge")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete black list Hoge/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple black_list Hoge")
-    return
-  it 'new black_list', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add black list Hoge/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple black_list Hoge")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hoge++ Hoge++")
     return
 
 describe 'KarmaSimple(thing black list regexp string)', ->
@@ -434,30 +320,6 @@ describe 'KarmaSimple(personal_increment_message)', ->
       return
     adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
     return
-  it 'delete personal increment_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add personal increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete personal increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
-    return
-  it 'new personal increment_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add personal increment_message_list Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal increment_message Happy")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 Happy/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hoge++")
-    return
 
 describe 'KarmaSimple(personal_decrement_message)', ->
   robot = undefined
@@ -486,28 +348,4 @@ describe 'KarmaSimple(personal_decrement_message)', ->
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
-    return
-  it 'delete personal decrement_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add personal decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /delete personal decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
-    return
-  it 'new personal decrement_message', (done) ->
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /add personal decrement_message_list Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
-    adapter.on 'send', (envelope, strings) ->
-      expect(strings[0]).match /hoge: 1 Sorry/
-      done()
-      return
-    adapter.receive new TextMessage(user, "hoge--")
     return
