@@ -32,6 +32,7 @@ class KarmaSimpleStorage
     @use_command_alias                = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
     @use_command_personal_increment_message    = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_INCREMENT_MESSAGE
     @use_command_personal_decrement_message    = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_DECREMENT_MESSAGE
+    @use_command_personal_message_type         = process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_MESSAGE_TYPE
 
     @message_regexp     = new RegExp(message_regexp_string,"g","m")
     @message_regexp_row = new RegExp(message_regexp_string)
@@ -50,6 +51,38 @@ class KarmaSimpleStorage
 
     unless @cache['decrement_message_list'].length
         @cache['decrement_message_list'].push 'lost a level.'
+
+  set_personal_message_type: (user_name,message_type) ->
+    @cache['personal'] ?= {}
+    @cache['personal'][user_name] ?= {}
+    @cache['personal'][user_name]['message_type'] = message_type
+
+  get_message_from_personal_message_type: (user_name,message_type) ->
+
+    personal_message_type = @get_personal_message_type(user_name) || 'default'
+
+    if personal_message_type == 'default'
+        return @get_personal_message(user_name,message_type) || @get_message(message_type)
+    else if personal_message_type == 'common'
+        return @get_message(message_type)
+    else if personal_message_type == 'personal'
+        return @get_personal_message(user_name,message_type)
+    else
+        all_message_list      = @get_message_list message_type
+        personal_message_list = @get_personal_message_list user_name,message_type
+
+        if personal_message_list
+            all_message_list = _.flatten([all_message_list,personal_message_list])
+
+        return all_message_list[Math.floor(Math.random() * all_message_list.length)]
+
+  get_personal_message_type: (user_name) ->
+    unless @cache['personal']
+        return
+    unless @cache['personal'][user_name]
+        return
+
+    return @cache['personal'][user_name]['message_type']
 
   add_personal_message_list: (user_name,type,message) ->
     @cache['personal'] ?= {}

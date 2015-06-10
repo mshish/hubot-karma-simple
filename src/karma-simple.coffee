@@ -9,6 +9,7 @@
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_DECREMENT_MESSAGE
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_INCREMENT_MESSAGE
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_DECREMENT_MESSAGE
+#   HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_MESSAGE_TYPE
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_BLACK_LIST
 #   HUBOT_KARUMA_SIMPLE_USE_COMMAND_ALIAS
 #   HUBOT_KARUMA_SIMPLE_THING_BLACK_LIST_REGEXP_STRING
@@ -24,6 +25,7 @@
 #   hubot karma-simple decrement_message <message>
 #   hubot karma-simple personal increment_message <message>
 #   hubot karma-simple personal decrement_message <message>
+#   hubot karma-simple personal message_type <all|personal|common|default>
 #
 # Author:
 #   hiroyukim
@@ -60,12 +62,12 @@ module.exports = (robot) ->
 
         if op == '++'
             karma.increment thing
-            increment_message = karma.get_personal_message(msg.message.user.name,'increment_message_list') || karma.get_message('increment_message_list')
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{increment_message}"
+            increment_message = karma.get_message_from_personal_message_type(msg.message.user.name,'increment_message_list')
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{increment_message || ''}"
         else
             karma.decrement thing
-            decrement_message = karma.get_personal_message(msg.message.user.name,'decrement_message_list') || karma.get_message('decrement_message_list')
-            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{decrement_message}"
+            decrement_message = karma.get_message_from_personal_message_type(msg.message.user.name,'decrement_message_list')
+            msg.send "#{msg_thing}: #{karma.get_with_alias(msg_thing)} #{decrement_message || ''}"
 
   robot.respond /karma-simple alias ([^\s]+) ([^\s]+)/, (msg) ->
     thing      = msg.match[1]
@@ -148,3 +150,14 @@ module.exports = (robot) ->
         karma.add_personal_message_list user_name,message_type,message
         msg.send "add personal #{message_type} #{message}"
 
+  robot.respond /karma-simple personal message_type (default|personal|common|all)/, (msg) ->
+
+    message_type = msg.match[1]
+    user_name    = msg.message.user.name
+
+    unless karma.use_command_personal_message_type
+        msg.send "cannot use this command now. (see Configuration:"
+        return
+
+    karma.set_personal_message_type user_name,message_type
+    msg.send "set personal message_type #{message_type}"

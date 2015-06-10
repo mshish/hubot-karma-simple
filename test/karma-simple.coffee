@@ -106,6 +106,14 @@ describe 'KarmaSimple(default)', ->
     adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message hoge")
     return
 
+  it 'set personal message_type', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /cannot use this command now\. \(see Configuration:/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal message_type personal")
+    return
+
   return
 
 describe 'KarmaSimple(alias)', ->
@@ -348,4 +356,66 @@ describe 'KarmaSimple(personal_decrement_message)', ->
       done()
       return
     adapter.receive new TextMessage(user, "hubot karma-simple personal decrement_message Sorry")
+    return
+
+describe 'KarmaSimple(personal_message_type)', ->
+  robot = undefined
+  user = undefined
+  adapter = undefined
+  beforeEach (done) ->
+    robot = new Robot(null, 'mock-adapter', false, 'hubot')
+    robot.adapter.on 'connected', ->
+      process.env.HUBOT_KARUMA_SIMPLE_USE_COMMAND_PERSONAL_MESSAGE_TYPE = "1"
+      require('../src/karma-simple') robot
+      user = robot.brain.userForId('1',
+        name: 'mocha'
+        room: '#mocha')
+      adapter = robot.adapter
+      done()
+      return
+    robot.run()
+    return
+  afterEach ->
+    robot.shutdown()
+    return
+
+  it 'set personal message_type', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /set personal message_type personal/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hubot karma-simple personal message_type personal")
+    return
+
+  it 'set personal message_type(personal,hoge++)', (done) ->
+    robot.brain.data.karma_simple['personal'] ?= {}
+    robot.brain.data.karma_simple['personal']['mocha'] ?= {}
+    robot.brain.data.karma_simple['personal']['mocha']['message_type'] = 'personal'
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /^hoge: 1 $/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hoge++")
+    return
+
+  it 'set personal message_type(common,hoge++)', (done) ->
+    robot.brain.data.karma_simple['personal'] ?= {}
+    robot.brain.data.karma_simple['personal']['hoge'] ?= {}
+    robot.brain.data.karma_simple['personal']['hoge']['message_type'] = 'common'
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /^hoge: 1 level up!$/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hoge++")
+    return
+
+  it 'set personal message_type(all,hoge++)', (done) ->
+    robot.brain.data.karma_simple['personal'] ?= {}
+    robot.brain.data.karma_simple['personal']['hoge'] ?= {}
+    robot.brain.data.karma_simple['personal']['hoge']['message_type'] = 'all'
+    adapter.on 'send', (envelope, strings) ->
+      expect(strings[0]).match /^hoge: 1 level up!$/
+      done()
+      return
+    adapter.receive new TextMessage(user, "hoge++")
     return

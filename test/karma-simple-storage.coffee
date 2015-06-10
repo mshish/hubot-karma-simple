@@ -79,3 +79,33 @@ describe 'KarmaSimpleStorage', ->
 
       s.delete_personal_message_list('hoge','increment_message_list','thing')
       expect(s.cache['personal']['hoge']['increment_message_list']).to.not.include('thing')
+
+  describe 'personal message_type', ->
+
+    it 'undefined get_personal_message_type', ->
+      message_type = s.get_personal_message_type('hoge')
+      expect(message_type).to.undefined
+
+    it 'set|get_personal_message_type', ->
+      s.set_personal_message_type('hoge','personal')
+      message_type = s.get_personal_message_type('hoge')
+      expect(message_type).to.equal('personal')
+
+    it 'get_message_from_personal_message_type(default)', ->
+      message = s.get_message_from_personal_message_type('hoge','increment_message_list')
+      expect(message).to.equal('level up!')
+
+    it 'get_message_from_personal_message_type(personal)', ->
+      s.set_personal_message_type('hoge','personal')
+      message = s.get_message_from_personal_message_type('hoge','increment_message_list')
+      expect(message).to.undefined
+
+    it 'get_message_from_personal_message_type(common)', ->
+      s.set_personal_message_type('hoge','common')
+      message = s.get_message_from_personal_message_type('hoge','increment_message_list')
+      expect(message).to.equal('level up!')
+
+    it 'get_message_from_personal_message_type(all)', ->
+      s.set_personal_message_type('hoge','all')
+      message = s.get_message_from_personal_message_type('hoge','increment_message_list')
+      expect(message).to.equal('level up!')
