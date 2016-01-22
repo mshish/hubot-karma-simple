@@ -36,6 +36,18 @@ module.exports = (robot) ->
 
   karma = new KarmaSimpleStorage robot
 
+  userForMentionName = (mentionName) ->
+    for id, user of robot.brain.users()
+      return user if mentionName is user.mention_name
+
+  # User tokenization from https://github.com/rbergman/hubot-karma
+  usersForToken = (token) ->
+    user = robot.brain.userForName token
+    return [user] if user
+    user = userForMentionName token
+    return [user] if user
+    robot.brain.usersForFuzzyName token
+
   robot.hear karma.message_regexp, (msg) ->
 
     if karma.room_black_list_regexp && karma.room_black_list_regexp.test(msg.message.room)
@@ -55,7 +67,18 @@ module.exports = (robot) ->
         if karma.thing_black_list_regexp && karma.thing_black_list_regexp.test(thing)
             continue
 
+        # Remove leading @ sign
+        if thing.match("^@")
+          thing = thing.substring(1, thing.length)
+
+        # Borrowed from https://github.com/rbergman/hubot-karma
+        usercompletion = usersForToken thing
+
+        if usercompletion.length is 1
+          thing = usercompletion[0].name
+
         msg_thing   = thing
+
         alias_thing = karma.get_alias(thing)
         if alias_thing
             msg_thing = alias_thing
