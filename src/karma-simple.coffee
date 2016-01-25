@@ -76,6 +76,9 @@ module.exports = (robot) ->
 
         if usercompletion.length is 1
           thing = usercompletion[0].name
+        else if usercompletion.length > 1
+          msg.send "Be more specific, I know #{usercompletion.length} people named like that: #{(u.name for u in usercompletion).join ", "}."
+          return
 
         msg_thing   = thing
 
@@ -184,3 +187,19 @@ module.exports = (robot) ->
 
     karma.set_personal_message_type user_name,message_type
     msg.send "set personal message_type #{message_type}"
+
+  robot.hear /^karma-simple(?:\s+@?(.*))?$/, (response) ->
+    targetToken = response.match[1]?.trim()
+    if not targetToken? or targetToken.toLowerCase() is "all"
+      users = robot.brain.users()
+      list = Object.keys(users)
+        .sort()
+        .map((k) -> [karma.get_with_alias(users[k].name) or 0, users[k].name])
+        .sort((line1, line2) -> if line1[0] < line2[0] then 1 else if line1[0] > line2[0] then -1 else 0)
+        .map((line) -> line.join " ")
+      msg = "Karma for all users:\n#{list.join '\n'}"
+    else
+      targetUser = usersForToken targetToken
+      return if not targetUser[0]
+      msg = "#{targetUser[0].name} has #{karma.get_with_alias(targetUser[0].name)} karma."
+    response.send msg
