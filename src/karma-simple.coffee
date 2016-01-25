@@ -19,6 +19,8 @@
 # Commands:
 #   <thing>++ - give thing some karma
 #   <thing>-- - take away some of thing's karma
+#   hubot karma-simple all - List all karma
+#   hubot karma-simple <thing> - list a thing's karma
 #   hubot karma-simple alias <thing> <alias thing>
 #   hubot karma-simple black_list <thing>
 #   hubot karma-simple increment_message <message>
